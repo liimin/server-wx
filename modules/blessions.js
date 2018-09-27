@@ -10,31 +10,22 @@ class BlessionsModel {
      */
     static async getBlessionsList(params) {
         let ret = null;
-        const { page=1, type } =params
-        if (type) {
-            ret = await Blessions.findAndCountAll({
-                limit: 10,//每页10条
-                offset: (page - 1) * 10,
-                where: {
-                    type
-                },
-            });
-
-        } else {
-            ret = await Blessions.findAndCountAll({
-                limit: 10,//每页10条
-                offset: (page - 1) * 10,
-            });
-        }
+        let { page = 1, type, pageSize = 10 } =params
+        const where = type ? { type } : null
+        pageSize = +pageSize
+        ret = await Blessions.findAndCountAll({
+            limit: pageSize,//每页10条
+            offset: (page - 1) * pageSize,
+            where
+        });
         return {
             code: 200,
             data: ret.rows,
-            meta: {
-                current_page: parseInt(page),
-                per_page: 10,
-                count: ret.count,
+            page: {
+                cur: page,
                 total: ret.count,
-                total_pages: Math.ceil(ret.count / 10),
+                size: pageSize,
+                pages: Math.ceil(ret.count / pageSize),
             }
         }
     }
