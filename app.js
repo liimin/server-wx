@@ -28,6 +28,7 @@ app.use(jwt({secret: secret.sign}).unless({
         /^\/api\/v1\/article\/list/,
 
         /^\/api\/v1\/blessions\/list/,
+        /^\/api\/v1\/temples\/list/,
     ]
 }))
 

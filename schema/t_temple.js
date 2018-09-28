@@ -61,6 +61,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 't_temple'
+    tableName: 't_temple',
+    timestamps: false
   });
 };

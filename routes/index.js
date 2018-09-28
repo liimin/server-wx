@@ -1,7 +1,8 @@
 const Router = require('koa-router')
 // const UserController = require('../controllers/user')
 // const ArticleController = require('../controllers/article')
-const BlessionsController = require('../controllers/blessions')
+const TempleController = require('../controllers/temple')
+const TemplesController = require('../controllers/temples')
 const router = new Router({
     prefix: '/api/v1'
 })
@@ -35,6 +36,8 @@ const router = new Router({
 // router.get('/article/list', ArticleController.getArticleList);
 
 // 获取祝福语列表
-router.get('/blessions/list', BlessionsController.getBlessionsList);
+router.get('/blessions/list', TempleController.getBlessionsList);
+// 获取寺观列表
+router.get('/temples/list', TemplesController.getTempleList);
 
 module.exports = router

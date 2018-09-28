@@ -1,5 +1,7 @@
-const {Model,response}=require('./common/base')('blessions');
-class blessionsController {
+const __base=require('../common/base')('blessions')
+const {response}=__base;
+const blessionsService=__base.Sevice
+class templeController {
     /**
      * 获取祝福语列表
      * @param ctx
@@ -7,11 +9,11 @@ class blessionsController {
      */
     static async getBlessionsList(ctx) {
         try {
-            const data =await Model.getBlessionsList(ctx.query)
+            const data =await blessionsService.getBlessionsList(ctx.query)
             response.SUCCESS(data,ctx)
         } catch (e) {
             response.ERROR(response.CODE.ERROR_412,e,ctx);
         }
     }
 }
-module.exports = blessionsController
+module.exports = templeController
