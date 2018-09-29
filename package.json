@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "co-wechat-api": "^3.8.1",
     "debug": "^2.6.3",
     "jsonwebtoken": "^8.2.2",
     "koa": "^2.2.0",

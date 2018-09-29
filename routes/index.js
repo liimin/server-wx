@@ -6,7 +6,6 @@ const TemplesController = require('../controllers/temples')
 const router = new Router({
     prefix: '/api/v1'
 })
-
 /**
  * 用户接口
  */
@@ -35,9 +34,12 @@ const router = new Router({
 // 获取文章列表
 // router.get('/article/list', ArticleController.getArticleList);
 
-// 获取祝福语列表
-router.get('/blessions/list', TempleController.getBlessionsList);
 // 获取寺观列表
 router.get('/temples/list', TemplesController.getTempleList);
+
+// 获取祝福语列表
+router.get('/blessions/list', TempleController.getBlessionsList);
+// 获取微信配置
+router.get('/temple/wx/sign', TempleController.getSignature);
 
 module.exports = router
