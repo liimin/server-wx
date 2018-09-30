@@ -24,10 +24,9 @@ class templeController {
      */
     static async getSignature(ctx) {
         try {
-            const data = await wxapi.getJsConfig({  
+            const data = await wxapi.getJsConfig({
                 url: ctx.request.header.referer,  
             });
-            console.log(ctx.request.header.referer)
             response.SUCCESS(data,ctx)
         } catch (e) {
             response.ERROR(response.CODE.ERROR_412,e,ctx);
