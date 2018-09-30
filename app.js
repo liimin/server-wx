@@ -34,7 +34,10 @@ app.use(jwt({secret: secret.sign}).unless({
 
 // middlewares
 app.use(bodyparser({
-    enableTypes: ['json', 'form', 'text']
+    enableTypes: ['json', 'form', 'text'],
+    extendTypes: {
+        text: ['text/xml', 'application/xml']
+    }
 }))
 app.use(json())
 app.use(logger())
