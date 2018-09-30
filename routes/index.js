@@ -40,6 +40,6 @@ router.get('/temples/list', TemplesController.getTempleList);
 // 获取祝福语列表
 router.get('/blessions/list', TempleController.getBlessionsList);
 // 获取微信配置
-router.post('/temple/wx/sign', TempleController.getSignature);
+router.get('/temple/wx/sign', TempleController.getSignature);
 
 module.exports = router
