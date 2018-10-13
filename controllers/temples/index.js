@@ -15,5 +15,12 @@ class templesController {
             response.ERROR(response.CODE.ERROR_412,e,ctx);
         }
     }
+    static async addTemple(ctx) {
+        try {
+            console.log(ctx.request.body)
+        } catch (e) {
+            response.ERROR(response.CODE.ERROR_412,e,ctx);
+        }
+    }
 }
 module.exports = templesController

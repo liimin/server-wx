@@ -16,6 +16,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(11),
       allowNull: true
     },
+    citycode: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true
+    },
     feature: {
       type: DataTypes.INTEGER(11),
       allowNull: true
@@ -36,8 +40,8 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(256),
       allowNull: true
     },
-    provice: {
-      type: "VARBINARY(32)",
+    province: {
+      type: DataTypes.STRING(32),
       allowNull: true
     },
     city: {
@@ -58,6 +62,19 @@ module.exports = function(sequelize, DataTypes) {
     },
     updatetime: {
       type: DataTypes.DATE,
+      allowNull: true
+    },
+    description: {
+      type: DataTypes.STRING(1024),
+      allowNull: true
+    },
+    introduction: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      field: 'introduction'
+    },
+    pic: {
+      type: DataTypes.STRING(1024),
       allowNull: true
     }
   }, {

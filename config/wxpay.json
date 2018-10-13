@@ -3,5 +3,6 @@
   "mchid": "1515525081",
   "partnerKey": "abcdefghijklmnopqrstuvwxyz123456",
   "pfx": "./pfx.txt",
-  "spbill_create_ip": "127.0.0.1"
+  "spbill_create_ip": "127.0.0.1",
+  "notify_url":"http://weeechat.free.idcfengye.com"
 }

@@ -6,30 +6,47 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const jwt = require('koa-jwt')
 const logger = require('koa-logger')
-const cors = require('koa-cors');
+const cors = require('koa2-cors');
 const index = require('./routes/index')
 const secret = require('./config/secret')
 const err = require('./middlreware/error')
+const path = require ('path')
+const util = require('./util/util')
+const wechat =require('./wechat/g')
+const wechat_file = path.join(__dirname,'./config/wechat.txt')
+var config={
+    wechat:{
+        appID:'wxd602cfb35118a94b',
+        appSecret:'36852f01d737b09f526effdf9bf04d6a',
+        token:'abcdefgh123',
+        getAccessToken:function(){
+            return util.readFileAsync(wechat_file)
+        },
+        saveAccessToken : function(data){
+            data = JSON.stringify(data)
+            return util.writeFileAsync(wechat_file,data)
+        }
+    }
+}
 
 // error handler
 onerror(app)
-
 app.use(err())
 app.use(cors());
-
 // 过滤不用jwt验证
 app.use(jwt({secret: secret.sign}).unless({
     path: [
         // 注册接口
         /^\/api\/v1\/user\/register/,
         // 登录接口
-        /^\/api\/v1\/user\/login/,
-        // 文章列表
-        /^\/api\/v1\/article\/list/,
-
+        /^\/api\/v1\/admin\/login/,
+        // 点灯
+        /^\/api\/v1\/temple\/lighton/,
         /^\/api\/v1\/blessions\/list/,
         /^\/api\/v1\/temples\/list/,
         /^\/api\/v1\/temple\/wx\/sign/,
+        /^\/api\/v1\/temples\/add/,
+        /^\//,
     ]
 }))
 
@@ -63,5 +80,5 @@ app.use(index.routes(), index.allowedMethods())
 app.on('error', (err, ctx) => {
     console.error('server error', err, ctx)
 });
-
+// app.use(wechat(config.wechat))
 module.exports = app

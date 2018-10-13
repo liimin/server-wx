@@ -6,16 +6,21 @@ class TemplesService {
      * @returns {Promise<*>}
      */
     static async getTempleList(params) {
-        let { type } =params
+        let { type,order,citycode } =params
         const Pager=helper.PageEx(params)
         const { limit,offset } =Pager
-        const where = type ? { type } : null
+        const where = {}
+        type && (where['type']=type)
+        citycode && (where['citycode']=citycode)
         const ret = await Service.findAndCountAll({
             limit,
             offset,
             where
         });
         return helper.GetReturnObj(Pager,ret)
+    }
+    static async addTemple(params){
+        console.log(params)
     }
 }
 

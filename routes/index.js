@@ -3,6 +3,7 @@ const Router = require('koa-router')
 // const ArticleController = require('../controllers/article')
 const TempleController = require('../controllers/temple')
 const TemplesController = require('../controllers/temples')
+const AdminController = require('../controllers/admin')
 const router = new Router({
     prefix: '/api/v1'
 })
@@ -36,10 +37,18 @@ const router = new Router({
 
 // 获取寺观列表
 router.get('/temples/list', TemplesController.getTempleList);
-
+// 新增寺观
+router.post('/temples/add', TemplesController.addTemple);
 // 获取祝福语列表
 router.get('/blessions/list', TempleController.getBlessionsList);
 // 获取微信配置
 router.get('/temple/wx/sign', TempleController.getSignature);
+// 点灯
+router.post('/temple/lighton', TempleController.lightOn);
+// 关灯
+router.post('/temple/lightoff', TempleController.lightOff);
+
+// 登录
+router.post('/admin/login', AdminController.login);
 
 module.exports = router
