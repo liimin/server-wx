@@ -35,6 +35,19 @@ class templeController {
         }
     }
     /**
+     * 获取寺庙详情
+     * @param ctx
+     * @returns {Promise.<void>}
+     */
+    static async getTempleDetail(ctx) {
+        try {
+            const data =await templeService.getTempleDetail(ctx.query)
+            response.SUCCESS(data,ctx)
+        } catch (e) {
+            response.ERROR(response.CODE.ERROR_412,e,ctx);
+        }
+    }
+    /**
      * 
      */
     static async getSignature(ctx) {

@@ -1,9 +1,10 @@
 const __base=require('../common/base')
 const BlessionsService=__base('blessions');
 const helper= require('../common/helper');
-var Promise =require('bluebird')
-var request =Promise.promisify(require('request'))
-
+const request =require('request')
+const fs = require('fs'); //文件模块
+var path = require('path'); //系统路径模块
+const util = require('../../util/util')
 class TempleSevice {
     /**
      * 获取祝福语列表
@@ -20,6 +21,21 @@ class TempleSevice {
             where
         });
         return helper.GetReturnObj(Pager,ret)
+    }
+
+    /**
+     * 获取祝福语列表
+     * @returns {Promise<*>}
+     */
+    static async getTempleDetail(params) {
+        let { id } =params
+        var file = path.join(__dirname, `../../public/${id}/content.json`); //文件路径，__dirname为当前运行js文件的目录
+        const res= await util.readFileAsync(file)
+        return {
+            code: 200,
+            data: JSON.parse(res.toString())
+        } 
+        // return helper.GetReturnObj(Pager,ret)
     }
 
     static async lightOn(formData) {
