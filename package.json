@@ -31,7 +31,8 @@
     "request": "^2.88.0",
     "sequelize": "^4.37.10",
     "sha1": "^1.1.1",
-    "tenpay": "^2.1.9"
+    "tenpay": "^2.1.9",
+    "wechat-pay": "^0.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.8.1"

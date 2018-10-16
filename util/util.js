@@ -17,3 +17,11 @@ exports.writeFileAsync=function(fpath,content){
         })
     })
 }
+
+exports.get_ip= function(ctx){
+    let ip = ctx.request.get("X-Real-IP") || ctx.request.get("X-Forwarded-For") || ctx.request.ip
+    if (ip.split(',').length > 0) {
+        ip = ip.split(',')[0]
+    }
+    return ip.replace(/::ffff:/g,'')
+}

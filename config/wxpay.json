@@ -1,8 +1,8 @@
 {
-  "appid": "wx967c55b4200dd601",
-  "mchid": "1515525081",
+  "appID": "wxd602cfb35118a94b",
+  "mchId": "1515525081",
+  "appSecret":"36852f01d737b09f526effdf9bf04d6a",
+  "token":"templeVAYNFc3ITJOd8MjyUNXyQiO321",
   "partnerKey": "abcdefghijklmnopqrstuvwxyz123456",
-  "pfx": "./pfx.txt",
-  "spbill_create_ip": "127.0.0.1",
-  "notify_url":"http://weeechat.free.idcfengye.com"
+  "notifyUrl":"http://weeechat.free.idcfengye.com"
 }

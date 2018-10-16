@@ -3,8 +3,7 @@ var sha1 = require('sha1')
 const getRawBody = require('raw-body')
 const Wechat= require('./wechat')
 
-module.exports=function(opts){
-    console.log(opts)
+module.exports=function(opts,ctx){
     var wechat =new Wechat(opts)
     return function *(req,next){
         var token =opts.token
@@ -25,7 +24,6 @@ module.exports=function(opts){
                 this.body='wrong'
                 return false
             }
-            console.log(11111111)
             try {
                 var data = yield getRawBody(req,{
                     length: this.length,
@@ -35,8 +33,6 @@ module.exports=function(opts){
             } catch (error) {
                 console.log(error)
             }
-            
-
             // console.log(data.toString())
         }
     }

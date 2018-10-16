@@ -30,10 +30,11 @@ const response = {
         return res
     },
     SUCCESS: (result, ctx) => {
-        let { code = response.CODE.SUCCESS,
-            data,
-            page,
-            msg = response.MESSAGE[response.CODE.SUCCESS]
+        let {
+            code = response.CODE.SUCCESS,
+                data,
+                page,
+                msg = response.MESSAGE[response.CODE.SUCCESS]
         } = result
         data = data || result
         const res = {

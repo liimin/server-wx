@@ -10,21 +10,22 @@ const cors = require('koa2-cors');
 const index = require('./routes/index')
 const secret = require('./config/secret')
 const err = require('./middlreware/error')
-const path = require ('path')
+const path = require('path')
 const util = require('./util/util')
-const wechat =require('./wechat/g')
-const wechat_file = path.join(__dirname,'./config/wechat.txt')
-var config={
-    wechat:{
-        appID:'wxd602cfb35118a94b',
-        appSecret:'36852f01d737b09f526effdf9bf04d6a',
-        token:'abcdefgh123',
-        getAccessToken:function(){
+
+const wechat = require('./wechat/g')
+const wechat_file = path.join(__dirname, './config/wechat.txt')
+var config = {
+    wechat: {
+        appID: 'wxd602cfb35118a94b',
+        appSecret: '36852f01d737b09f526effdf9bf04d6a',
+        token: 'templeVAYNFc3ITJOd8MjyUNXyQiO321',
+        getAccessToken: function () {
             return util.readFileAsync(wechat_file)
         },
-        saveAccessToken : function(data){
+        saveAccessToken: function (data) {
             data = JSON.stringify(data)
-            return util.writeFileAsync(wechat_file,data)
+            return util.writeFileAsync(wechat_file, data)
         }
     }
 }
@@ -34,7 +35,9 @@ onerror(app)
 app.use(err())
 app.use(cors());
 // 过滤不用jwt验证
-app.use(jwt({secret: secret.sign}).unless({
+app.use(jwt({
+    secret: secret.sign
+}).unless({
     path: [
         // 注册接口
         /^\/api\/v1\/user\/register/,
@@ -42,6 +45,8 @@ app.use(jwt({secret: secret.sign}).unless({
         /^\/api\/v1\/admin\/login/,
         // 点灯
         /^\/api\/v1\/temple\/lighton/,
+        // 支付
+        /^\/api\/v1\/temple\/payment/,
         /^\/api\/v1\/blessions\/list/,
         /^\/api\/v1\/temples\/list/,
         /^\/api\/v1\/temple\/wx\/sign/,
@@ -60,7 +65,6 @@ app.use(bodyparser({
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
-
 app.use(views(__dirname + '/views', {
     extension: 'pug'
 }))
@@ -72,10 +76,9 @@ app.use(async (ctx, next) => {
     const ms = new Date() - start
     console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
-
 // routes
 app.use(index.routes(), index.allowedMethods())
-
+// app.use(wechat(config.wechat))
 // error-handling
 app.on('error', (err, ctx) => {
     console.error('server error', err, ctx)
