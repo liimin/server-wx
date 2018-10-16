@@ -1,42 +1,103 @@
 const tenpay = require('tenpay')
-const axios = require('axios')
+var sha1 = require('sha1')
+// const fs = require('fs')
+const path = require('path')
+const wxpay_config = require('./config');
+const util = require('../util/util')
+const Wechat = require('./wechat')
+const wechat_file = path.join(__dirname, '../config/wechat.txt')
+const {
+  appID,
+  mchId,
+  partnerKey,
+  appSecret,
+  token,
+  notifyUrl,
+} = wxpay_config;
+const config = {
+  appID,
+  appSecret,
+  token,
+  getAccessToken: function () {
+    return util.readFileAsync(wechat_file)
+  },
+  saveAccessToken: function (data) {
+    data = JSON.stringify(data)
+    return util.writeFileAsync(wechat_file, data)
+  }
+}
+
+
 const wechatConfig = {
-    appid: 'xxxx',
-    mchid: 'xxxx',
-    partnerKey: 'xxxx',
-    notify_url: `www.domain.com/notify`, //微信异步通知的地址
+  appid: appID,
+  mchid: mchId,
+  partnerKey: partnerKey,
+  notify_url: notifyUrl, //微信异步通知的地址
 }
 const wechatApi = new tenpay(wechatConfig)
 
 async function unifiedOrder(ctx) {
-	//传过来的total_fee单位为：元，传给微信要转化为分
-	const {out_trade_no, total_fee} = ctx.request.body
-	let sceneInfoObj = {
-        h5_info: {
-            type:"Wap",
-            wap_url: 'xxxx',
-            wap_name: "赞赏"
-        }
+  //传过来的total_fee单位为：元，传给微信要转化为分
+  const {
+    out_trade_no,
+    total_fee,
+    body,
+    openid
+  } = ctx.request.body
+  let fee = total_fee
+  let result = await wechatApi.unifiedOrder({
+    out_trade_no, //商户内部订单号
+    body,
+    total_fee: fee * 100, //订单金额(单位：分)
+    spbill_create_ip: util.get_ip(), //ip地址
+    openid
+  })
+  return result
+}
+
+async function getPayParams(ctx) {
+  //传过来的total_fee单位为：元，传给微信要转化为分
+  const {
+    out_trade_no,
+    total_fee,
+    body,
+    openid
+  } = ctx.request.body
+  let fee = total_fee
+  let order = await wechatApi.unifiedOrder({
+    out_trade_no, //商户内部订单号
+    body,
+    total_fee: fee * 100, //订单金额(单位：分)
+    spbill_create_ip: util.get_ip(), //ip地址
+    openid
+  })
+  let result = await api.getPayParamsByPrepay({
+    order
+  });
+  return result
+}
+
+async function access_token(ctx) {
+  try {
+    const wechat = new Wechat(config)
+    const {
+      signature,
+      nonce,
+      timestamp,
+      echostr
+    } = ctx.query
+    var token = config.token
+    var str = [token, timestamp, nonce].sort().join('')
+    var sha = sha1(str)
+    if (sha === signature) {
+      ctx.body = echostr + ''
+    } else {
+      ctx.body = 'wrong'
     }
-    function get_ip () { //获取用户的真实ip
-		let ip = ctx.request.get("X-Real-IP") || ctx.request.get("X-Forwarded-For") || ctx.request.ip
-        if (ip.split(',').length > 0) {
-            ip = ip.split(',')[0]
-        }
-        return ip
-    }
-    let fee = total_fee
-    let result = await wechatApi.unifiedOrder({
-        out_trade_no: out_trade_no, //商户内部订单号
-        body: 'xxxxxxxxxxxxxxxxxxxxx',
-        total_fee: fee*100, //订单金额(单位：分)
-        trade_type: 'MWEB',
-        spbill_create_ip: get_ip(), //ip地址
-        scene_info: JSON.stringify(sceneInfoObj) //场景信息
-    })
-    ctx.response.status = 302
-    ctx.response.type = 'json'
-    ctx.response.body = {next: result.mweb_url}
+  } catch (e) {
+    console.log(e)
+    ctx.body = 'wrong'
+  }
 }
 
 async function notifyVerify(ctx) {
@@ -45,7 +106,7 @@ async function notifyVerify(ctx) {
   let total_fee, order_status
   //根据订单号去后台取详细数据
   await axios({
-    method:'get',
+    method: 'get',
     url: 'order/',
     params: {
       order_id: info.out_trade_no
@@ -55,21 +116,21 @@ async function notifyVerify(ctx) {
     order_status = res.data.order_status //交易完成状态，1表示已完成，0表示未完成
   })
   // 在`node-tenpay`源码中已校验签名，所以这里只需要校验金额
-  if (order_status !== 0){  
+  if (order_status !== 0) {
     ctx.reply('订单已支付')
-  }else if (info.total_fee === total_fee) {
+  } else if (info.total_fee === total_fee) {
     //交易成功，记录入库
-    try{
+    try {
       await axios.post({
         url: 'www.domain.com/api/order/finish/',
         data: {
-          order_id: info.out_trade_no,  //订单号
+          order_id: info.out_trade_no, //订单号
           notify_trade_no: info.transaction_id, //微信交易流水号
           order_status: 1, //交易状态
         }
       })
       ctx.reply('') //回复微信商户接收通知成功并校验成功
-    }catch (e) {
+    } catch (e) {
       ctx.reply(e)
       throw new Error(e)
     }
@@ -78,4 +139,10 @@ async function notifyVerify(ctx) {
   }
 }
 
-module.exports = {unifiedOrder, wechatApi, notifyVerify}
+module.exports = {
+  unifiedOrder,
+  wechatApi,
+  notifyVerify,
+  getPayParams,
+  access_token
+}

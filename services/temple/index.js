@@ -141,6 +141,8 @@ class TempleSevice {
         // return helper.GetReturnObj(Pager,ret)
     }
 
+    
+
     /**
      * 获取微信用户信息
      * @returns {Promise<*>}

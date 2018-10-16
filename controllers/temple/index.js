@@ -1,62 +1,62 @@
 const __base = require('../common/base')('temple')
-const path = require('path')
+// const path = require('path')
 const {
     response
 } = __base;
 const templeService = __base.Sevice
-var sha1 = require('sha1')
-const fs = require('fs')
-const wxpay_config = require('../../config/wxpay');
-const {
-    appID,
-    mchId,
-    partnerKey,
-    appSecret,
-    token,
-    notifyUrl,
-} = wxpay_config;
-const util = require('../../util/util')
-const Wechat = require('../../wechat/wechat')
-const wechat_file = path.join(__dirname, '../../config/wechat.txt')
-const config = {
-    wechat: {
-        appID,
-        appSecret,
-        token,
-        getAccessToken: function () {
-            return util.readFileAsync(wechat_file)
-        },
-        saveAccessToken: function (data) {
-            data = JSON.stringify(data)
-            return util.writeFileAsync(wechat_file, data)
-        }
-    }
-}
-
-// const wxapi = new WechatAPI(appid, appsecret); 
+// var sha1 = require('sha1')
+// const fs = require('fs')
 // const wxpay_config = require('../../config/wxpay');
-// const tenpay = require('tenpay');
-// const { appid,mchid,partnerKey,pfx,notify_url,spbill_create_ip } =wxpay_config;
-// const config = {
-//     appid,
-//     mchid,
+// const {
+//     appID,
+//     mchId,
 //     partnerKey,
-//     pfx: fs.readFileSync(path.join(__dirname,'../../config/cert/apiclient_cert.p12')),
-//     notify_url,
-//     spbill_create_ip
+//     appSecret,
+//     token,
+//     notifyUrl,
+// } = wxpay_config;
+// const util = require('../../util/util')
+// const Wechat = require('../../wechat/wechat')
+// const wechat_file = path.join(__dirname, '../../config/wechat.txt')
+// const config = {
+//     wechat: {
+//         appID,
+//         appSecret,
+//         token,
+//         getAccessToken: function () {
+//             return util.readFileAsync(wechat_file)
+//         },
+//         saveAccessToken: function (data) {
+//             data = JSON.stringify(data)
+//             return util.writeFileAsync(wechat_file, data)
+//         }
+//     }
+// }
+
+// // const wxapi = new WechatAPI(appid, appsecret); 
+// // const wxpay_config = require('../../config/wxpay');
+// // const tenpay = require('tenpay');
+// // const { appid,mchid,partnerKey,pfx,notify_url,spbill_create_ip } =wxpay_config;
+// // const config = {
+// //     appid,
+// //     mchid,
+// //     partnerKey,
+// //     pfx: fs.readFileSync(path.join(__dirname,'../../config/cert/apiclient_cert.p12')),
+// //     notify_url,
+// //     spbill_create_ip
+// // };
+// // const api = new tenpay(config, true);
+
+// const Payment = require('wechat-pay').Payment;
+
+// const initConfig = {
+//     partnerKey,
+//     appId:appID,
+//     mchId,
+//     notifyUrl,
+//     pfx: fs.readFileSync(path.join(__dirname, '../../config/cert/apiclient_cert.p12'))
 // };
-// const api = new tenpay(config, true);
-
-const Payment = require('wechat-pay').Payment;
-
-const initConfig = {
-    partnerKey,
-    appId:appID,
-    mchId,
-    notifyUrl,
-    pfx: fs.readFileSync(path.join(__dirname, '../../config/cert/apiclient_cert.p12'))
-};
-const payment = new Payment(initConfig);
+// const payment = new Payment(initConfig);
 
 class templeController {
     /**
