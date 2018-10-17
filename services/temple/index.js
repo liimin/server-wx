@@ -35,14 +35,18 @@ class TempleSevice {
      * @returns {Promise<*>}
      */
     static async getTempleDetail(params) {
-        let {
-            id
-        } = params
-        var file = path.join(__dirname, `../../public/${id}/content.json`); //文件路径，__dirname为当前运行js文件的目录
-        const res = await util.readFileAsync(file)
-        return {
-            code: 200,
-            data: JSON.parse(res.toString())
+        try {
+            let {
+                id
+            } = params
+            var file = path.join(__dirname, `../../public/${id}/content.json`); //文件路径，__dirname为当前运行js文件的目录
+            const res = await util.readFileAsync(file)
+            return {
+                code: 200,
+                data: JSON.parse(res.toString())
+            }
+        } catch (error) {
+            console.log(error)
         }
         // return helper.GetReturnObj(Pager,ret)
     }
