@@ -6,6 +6,9 @@ const wxpay_config = require('./config');
 const util = require('../util/util')
 const Wechat = require('./wechat')
 const wechat_file = path.join(__dirname, '../config/wechat.txt')
+
+const Payment = require('wechat-pay').Payment;
+
 const {
   appID,
   mchId,
@@ -14,6 +17,16 @@ const {
   token,
   notifyUrl,
 } = wxpay_config;
+
+const initConfig = {
+    partnerKey,
+    appId:appID,
+    mchId,
+    notifyUrl,
+    pfx: fs.readFileSync(path.join(__dirname, '../../config/cert/apiclient_cert.p12'))
+};
+const payment = new Payment(initConfig);
+
 const config = {
   appID,
   appSecret,
@@ -100,6 +113,34 @@ async function access_token(ctx) {
   }
 }
 
+async function getBrandWCPayRequestParams(ctx) {
+  try {
+      const {
+        out_trade_no,
+        total_fee,
+        body,
+        openid
+      } = ctx.request.body
+      const {
+          payment
+      } = req
+      var order = {
+          body: '吮指原味鸡 * 1',
+          attach: '{"部位":"三角"}',
+          out_trade_no: 'kfc' + (+new Date),
+          total_fee: 1,
+          spbill_create_ip: req.ip,
+          openid: req.openid,
+          trade_type: 'JSAPI'
+      };
+      const payargs = await payment.getBrandWCPayRequestParams(order)
+      return payargs
+  } catch (e) {
+    console.log(e)
+    ctx.body = 'wrong'
+  }
+}
+
 async function notifyVerify(ctx) {
   let info = ctx.request.weixin //微信返回的信息
 
@@ -144,5 +185,6 @@ module.exports = {
   wechatApi,
   notifyVerify,
   getPayParams,
-  access_token
+  access_token,
+  getBrandWCPayRequestParams
 }
