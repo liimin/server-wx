@@ -2,7 +2,13 @@ const Router = require('koa-router')
 const TempleController = require('../controllers/temple')
 const TemplesController = require('../controllers/temples')
 const AdminController = require('../controllers/admin')
-const  { getPayParams, access_token, getBrandWCPayRequestParams} = require('../wechat/wepay')
+const {
+    getPayParams,
+    access_token,
+    getBrandWCPayRequestParams,
+    getWXOpenId,
+    getWXUserInfo
+} = require('../wechat/wepay')
 
 
 const router = new Router({
@@ -26,13 +32,15 @@ router.post('/temple/lightoff', TempleController.lightOff);
 // 登录
 router.post('/admin/login', AdminController.login);
 
+
+// *****************************微信 ***************************//
 // 微信配置验证
 router.get('/', access_token)
 // 获取微信openid
-router.get('/wx/openid', TempleController.getWXOpenId);
+router.get('/wx/openid', getWXOpenId);
 // 获取微信下单参数
 router.get('/wx/payparams', getPayParams)
-
 // 获取微信getBrandWCPayRequest 参数
 router.get('/wx/getBrandWCPayRequestParams', getBrandWCPayRequestParams)
+
 module.exports = router
