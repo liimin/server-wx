@@ -19,10 +19,10 @@ const router = new Router({
 router.get('/temples/list', TemplesController.getTempleList);
 // 获取寺观详情
 router.get('/temple/detail', TempleController.getTempleDetail);
-// 新增寺观
-router.post('/temples/add', TemplesController.addTemple);
 // 获取祝福语列表
 router.get('/blessions/list', TempleController.getBlessionsList);
+// 获取寺庙设备
+router.get('/device/list', TempleController.getTempleDevice);
 
 // 点灯
 router.post('/temple/lighton', TempleController.lightOn);
@@ -31,6 +31,8 @@ router.post('/temple/lightoff', TempleController.lightOff);
 
 // 登录
 router.post('/admin/login', AdminController.login);
+// 新增寺观
+router.post('/temples/add', TemplesController.addTemple);
 
 
 // *****************************微信 ***************************//

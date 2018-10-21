@@ -106,6 +106,39 @@ class TempleSevice {
             console.log(err)
         })
     }
+    
+    /**
+     * 获取祝福语列表
+     * @returns {Promise<*>}
+     */
+    static async getTempleDevice(params) {
+        try {
+            let {
+                temple_id
+            } = params
+            const sign = util.getSign({temple_id})
+            const url = `${helper.ServerBase}/get_status?temple_id=${temple_id}&sign=${sign}`
+            console.log(sign,url)
+            return new Promise(resolve=>{
+                request.get(url,(e,r,body)=> {
+                    body=(JSON.parse(body));
+                    resolve({
+                        code:body.errcode,
+                        msg: body.errmsg
+                    })
+                }).on('error', (response)=> {
+                    reject(error)
+                })
+            })
+            // return {
+            //     code: 200,
+            //     data: JSON.parse(res.toString())
+            // }
+        } catch (error) {
+            console.log(error)
+        }
+        // return helper.GetReturnObj(Pager,ret)
+    }
 }
 
 module.exports = TempleSevice

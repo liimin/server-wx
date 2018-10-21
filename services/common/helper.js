@@ -21,6 +21,7 @@ const Helper={
                 pages: Math.ceil(count / pageSize),
             }
         }
-    }
+    },
+    ServerBase:'http://59.110.235.8:9667'
 }
 module.exports=Helper

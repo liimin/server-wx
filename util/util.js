@@ -1,8 +1,10 @@
 'use strict'
 const fs = require('fs')
 const Promise = require('bluebird')
+const crypto = require('crypto')
 const md5 = (str, encoding = 'utf8') => crypto.createHash('md5').update(str, encoding).digest('hex');
 const sha256 = (str, key, encoding = 'utf8') => crypto.createHmac('sha256', key).update(str, encoding).digest('hex');
+const secret =''
 const toQueryString = (obj) => Object.keys(obj)
     .filter(key => key !== 'sign' && obj[key] !== undefined && obj[key] !== '')
     .sort()
@@ -34,7 +36,7 @@ exports.get_ip = function (ctx) {
     return ip.replace(/::ffff:/g, '')
 }
 
-exports.getSign = function (params, secret, type = 'MD5') {
+exports.getSign = function (params, type = 'MD5') {
     let str = secret + toQueryString(params) + secret;
     switch (type) {
         case 'MD5':

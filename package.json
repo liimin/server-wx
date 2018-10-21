@@ -12,6 +12,7 @@
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.2",
     "co-wechat-api": "^3.8.1",
+    "crypto": "^1.0.1",
     "debug": "^2.6.3",
     "jsonwebtoken": "^8.2.2",
     "koa": "^2.2.0",
