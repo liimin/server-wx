@@ -117,18 +117,31 @@ class TempleSevice {
                 temple_id
             } = params
             const sign = util.getSign({temple_id})
-            const url = `${helper.ServerBase}/get_status?temple_id=${temple_id}&sign=${sign}`
-            console.log(sign,url)
+            // const url = `${helper.ServerBase}/get_status?temple_id=1&sign=${sign}`
+            const url = `${helper.ServerBase}/get_status`
             return new Promise(resolve=>{
-                request.get(url,(e,r,body)=> {
-                    body=(JSON.parse(body));
-                    resolve({
-                        code:body.errcode,
-                        msg: body.errmsg
-                    })
-                }).on('error', (response)=> {
-                    reject(error)
+                request.post({
+                    url,
+                    form: JSON.stringify({temple_id:'1',sign:'11',temple:'xxx'})
+                }, function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        console.log(body) // 请求成功的处理逻辑 
+                        resolve(JSON.parse(body)) 
+                    } else {
+                        console.log(error)
+                        reject(error)
+                    }
                 })
+                // request.get(url,(e,r,body)=> {
+                //     console.log(body)
+                //     body=(JSON.parse(body));
+                //     resolve({
+                //         code:body.errcode,
+                //         msg: body.errmsg
+                //     })
+                // }).on('error', (response)=> {
+                //     reject(error)
+                // })
             })
             // return {
             //     code: 200,
