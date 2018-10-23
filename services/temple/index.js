@@ -65,13 +65,19 @@ class TempleSevice {
             temple_id,
             to,
             to_phone,
-            lights
+            lights,
+            time,
+            dimcode,
+            sn
         } = formData
         const params = {
             "text": words,
             "money": amount * 100,
             "temple": tampleName,
             "temple_id": temple_id,
+            "time":time * 24 * 60 * 60,
+            'sn':sn,
+            "dimcode": "1", 
             "user": {
                 "name": name, //！祈福人微信
                 "to": to,
