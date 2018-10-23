@@ -4,7 +4,6 @@ const helper = require('../common/helper');
 const request = require('request')
 const path = require('path'); //系统路径模块
 const util = require('../../util/util')
-const __server = `http://59.110.235.8:9667/`
 class TempleSevice {
     /**
      * 获取祝福语列表
@@ -53,7 +52,7 @@ class TempleSevice {
 
     static async lightOn(formData) {
         console.log("===================================on")
-        const url = `${__server}/lighton`
+        const url = `${helper.ServerBase}/lighton`
         const {
             amount,
             tampleName,
@@ -68,33 +67,35 @@ class TempleSevice {
             lights,
             time,
             dimcode,
-            sn
+            sn,
+            openid
         } = formData
         const params = {
             "text": words,
-            "money": amount * 100,
+            "money": String(amount * 100),
             "temple": tampleName,
-            "temple_id": temple_id,
+            "temple_id": String(temple_id),
             "time":time * 24 * 60 * 60,
             'sn':sn,
-            "dimcode": "1", 
+            "dimcode": "1",
+            openid, 
             "user": {
                 "name": name, //！祈福人微信
                 "to": to,
                 "to_birth": to_birth,
-                "phone": tel,
-                "to_phone": tel,
+                "phone": to_phone,
+                "to_phone": to_phone,
                 "to_addr": to_addr
             },
             "lights": lights
         }
         const sign = util.getSign(params)
         params.sign = sign
-        console.info(params)
         return new Promise(function (resolve, reject) {
             request.post({
                 url,
-                form: params
+                form: JSON.stringify(params),
+                encoding:'utf-8'
             }, function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     console.log(body) // 请求成功的处理逻辑 
@@ -123,12 +124,12 @@ class TempleSevice {
                 temple_id
             } = params
             const sign = util.getSign({temple_id})
-            // const url = `${helper.ServerBase}/get_status?temple_id=1&sign=${sign}`
             const url = `${helper.ServerBase}/get_status`
+            return
             return new Promise(resolve=>{
                 request.post({
                     url,
-                    form: JSON.stringify({temple_id:'1',sign:'11',temple:'xxx'})
+                    form: JSON.stringify({temple_id,sign:'11',temple:'xxx'})
                 }, function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                         console.log(body) // 请求成功的处理逻辑 
@@ -138,25 +139,10 @@ class TempleSevice {
                         reject(error)
                     }
                 })
-                // request.get(url,(e,r,body)=> {
-                //     console.log(body)
-                //     body=(JSON.parse(body));
-                //     resolve({
-                //         code:body.errcode,
-                //         msg: body.errmsg
-                //     })
-                // }).on('error', (response)=> {
-                //     reject(error)
-                // })
             })
-            // return {
-            //     code: 200,
-            //     data: JSON.parse(res.toString())
-            // }
         } catch (error) {
             console.log(error)
         }
-        // return helper.GetReturnObj(Pager,ret)
     }
 }
 
