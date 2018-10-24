@@ -75,7 +75,7 @@ class TempleSevice {
             "money": String(amount * 100),
             "temple": tampleName,
             "temple_id": String(temple_id),
-            "time":time * 24 * 60 * 60,
+            "time":String(time * 24 * 60 * 60),
             'sn':sn,
             "dimcode": "1",
             openid, 
@@ -125,7 +125,6 @@ class TempleSevice {
             } = params
             const sign = util.getSign({temple_id})
             const url = `${helper.ServerBase}/get_status`
-            return
             return new Promise(resolve=>{
                 request.post({
                     url,

@@ -39,9 +39,11 @@ router.post('/temples/add', TemplesController.addTemple);
 // 微信配置验证
 router.get('/', access_token)
 // 获取微信openid
-router.get('/wx/openid', getWXOpenId);
+router.post('/wx/openid', getWXOpenId);
 // 获取微信下单参数
-router.get('/wx/payparams', getPayParams)
+router.post('/wx/payparams', getPayParams)
+// 获取微信用户信息
+router.post('/wx/userinfo', getWXUserInfo)
 // 获取微信getBrandWCPayRequest 参数
 router.get('/wx/getBrandWCPayRequestParams', getBrandWCPayRequestParams)
 

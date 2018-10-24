@@ -6,7 +6,8 @@ const wxpay_config = require('./config/config');
 const util = require('../util/util')
 const Wechat = require('./wechat')
 const wechat_file = path.join(__dirname, './config/wechat.txt')
-
+var Promise = require('bluebird')
+var request = Promise.promisifyAll(require('request'))
 // const Payment = require('wechat-pay').Payment;
 
 const {
@@ -61,7 +62,7 @@ async function unifiedOrder(ctx) {
   let result = await wechatApi.unifiedOrder({
     out_trade_no, //商户内部订单号
     body,
-    total_fee: fee * 100, //订单金额(单位：分)
+    total_fee: fee, //订单金额(单位：分)
     spbill_create_ip: util.get_ip(), //ip地址
     openid
   })
@@ -151,22 +152,31 @@ async function getBrandWCPayRequestParams(ctx) {
  * @returns {Promise<*>}
  */
 async function getWXOpenId(ctx) {
+  console.log('==========================================getWXOpenId')
   let {
     code,
   } = ctx.request.body
+  console.log('=========================================='+code)
   let tokenUrl = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appID}&secret=${appSecret}&code=${code}&grant_type=authorization_code`;
-  request(tokenUrl, (error, response, body) => {
-    if (response && response.statusCode && response.statusCode === 200) {
-      try {
-        ctx.body = {
-          code: 200,
-          data: payargs
+  try {
+     const  { body,response } = await request(tokenUrl);
+     if (response && response.statusCode && response.statusCode === 200) {
+        const result  = JSON.parse(body)
+        const { openid, access_token }  = result
+        tokenUrl = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+        const  { body,response } =  await request(tokenUrl);
+        if (response && response.statusCode && response.statusCode === 200) {
+          ctx.body = {
+            code:200,
+            data : Object.assign({},result,JSON.parse(body))
+          }
         }
-      } catch (e) {
-        reject(e)
+      }else{
+        console.log('======================')
       }
-    }
-  });
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 /**
@@ -175,9 +185,10 @@ async function getWXOpenId(ctx) {
  */
 async function getWXUserInfo(ctx) {
   let {
-    openid
+    openid,
+    access_token
   } = ctx.request.body
-  const access_token = wechat.getAccessToken()
+  // const access_token = wechat.getAccessToken()
   var tokenUrl = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
   request(tokenUrl, function (error, response, body) {
     if (response && response.statusCode && response.statusCode === 200) {
