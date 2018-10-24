@@ -55,5 +55,13 @@ class templeController {
             response.ERROR(response.CODE.ERROR_412, e, ctx);
         }
     }
+    static async addWXUser(ctx){
+        try {
+            const data = await templeService.addWXUser(ctx.request.body)
+            response.SUCCESS(data, ctx)
+        } catch (e) {
+            response.ERROR(response.CODE.ERROR_412, e, ctx);
+        }
+    }
 }
 module.exports = templeController

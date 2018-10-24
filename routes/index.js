@@ -5,8 +5,8 @@ const AdminController = require('../controllers/admin')
 const {
     getPayParams,
     access_token,
-    getBrandWCPayRequestParams,
-    getWXOpenId,
+    // getBrandWCPayRequestParams,
+    // getWXOpenId,
     getWXUserInfo
 } = require('../wechat/wepay')
 
@@ -23,6 +23,8 @@ router.get('/temple/detail', TempleController.getTempleDetail);
 router.get('/blessions/list', TempleController.getBlessionsList);
 // 获取寺庙设备
 router.get('/device/list', TempleController.getTempleDevice);
+// 新增微信用户信息
+router.get('/wx/adduser', TempleController.addWXUser);
 
 // 点灯
 router.post('/temple/lighton', TempleController.lightOn);
@@ -39,12 +41,12 @@ router.post('/temples/add', TemplesController.addTemple);
 // 微信配置验证
 router.get('/', access_token)
 // 获取微信openid
-router.post('/wx/openid', getWXOpenId);
+// router.post('/wx/openid', getWXOpenId);
 // 获取微信下单参数
 router.post('/wx/payparams', getPayParams)
 // 获取微信用户信息
 router.post('/wx/userinfo', getWXUserInfo)
 // 获取微信getBrandWCPayRequest 参数
-router.get('/wx/getBrandWCPayRequestParams', getBrandWCPayRequestParams)
+// router.get('/wx/getBrandWCPayRequestParams', getBrandWCPayRequestParams)
 
 module.exports = router

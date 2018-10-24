@@ -30,6 +30,7 @@
     "pug": "^2.0.0-rc.1",
     "raw-body": "^2.3.3",
     "request": "^2.88.0",
+    "request-promise": "^4.2.2",
     "sequelize": "^4.37.10",
     "sha1": "^1.1.1",
     "tenpay": "^2.1.9",

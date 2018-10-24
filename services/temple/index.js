@@ -1,5 +1,6 @@
 const __base = require('../common/base')
 const BlessionsService = __base('blessions');
+const UserService = __base('user');
 const helper = require('../common/helper');
 const request = require('request')
 const path = require('path'); //系统路径模块
@@ -75,10 +76,10 @@ class TempleSevice {
             "money": String(amount * 100),
             "temple": tampleName,
             "temple_id": String(temple_id),
-            "time":String(time * 24 * 60 * 60),
-            'sn':sn,
+            "time": String(time * 24 * 60 * 60),
+            'sn': sn,
             "dimcode": "1",
-            openid, 
+            openid,
             "user": {
                 "name": name, //！祈福人微信
                 "to": to,
@@ -95,11 +96,11 @@ class TempleSevice {
             request.post({
                 url,
                 form: JSON.stringify(params),
-                encoding:'utf-8'
+                encoding: 'utf-8'
             }, function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     console.log(body) // 请求成功的处理逻辑 
-                    resolve(body) 
+                    resolve(body)
                 } else {
                     console.log(error)
                     reject(error)
@@ -113,7 +114,38 @@ class TempleSevice {
             console.log(err)
         })
     }
-    
+
+    /**
+     * 添加微信用户信息
+     * @param {*} WX用户信息 
+     */
+    static async addWXUser(formData) {
+       const {
+           name,
+           wechar,
+           phone,
+           monk_id,
+           openid,
+           temple_id,
+           addr,
+           default_temple_url,
+       } = formData
+       const user={
+            name,
+            wechar,
+            phone,
+            monk_id,
+            openid,
+            temple_id,
+            addr,
+            default_temple_url,
+            createtime:new Date(),
+            updatetime:new Date()
+       }
+      const result = await UserService.create(user)
+        console.log(result)
+    }
+
     /**
      * 获取祝福语列表
      * @returns {Promise<*>}
@@ -123,16 +155,22 @@ class TempleSevice {
             let {
                 temple_id
             } = params
-            const sign = util.getSign({temple_id})
+            const sign = util.getSign({
+                temple_id
+            })
             const url = `${helper.ServerBase}/get_status`
-            return new Promise(resolve=>{
+            return new Promise(resolve => {
                 request.post({
                     url,
-                    form: JSON.stringify({temple_id,sign:'11',temple:'xxx'})
+                    form: JSON.stringify({
+                        temple_id,
+                        sign: '11',
+                        temple: 'xxx'
+                    })
                 }, function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                         console.log(body) // 请求成功的处理逻辑 
-                        resolve(JSON.parse(body)) 
+                        resolve(JSON.parse(body))
                     } else {
                         console.log(error)
                         reject(error)
