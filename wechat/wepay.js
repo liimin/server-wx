@@ -42,20 +42,31 @@ const wechatApi = new tenpay(wechatConfig)
 
 async function getPayParams(ctx) {
   //传过来的total_fee单位为：元，传给微信要转化为分
-  const {
-    out_trade_no,
-    total_fee,
-    body,
-    openid
-  } = ctx.request.body
-  let result = await wechatApi.getPayParams({
-    out_trade_no, //商户内部订单号
-    body,
-    total_fee: total_fee,//total_fee * 100, //订单金额(单位：分)
-    spbill_create_ip: util.get_ip(), //ip地址
-    openid
-  })
-  return result
+  try {
+    const {
+      out_trade_no,
+      total_fee,
+      body,
+      openid
+    } = ctx.request.body
+    console.log(out_trade_no,
+      total_fee,
+      body,
+      openid);
+    let result = await wechatApi.getPayParams({
+      out_trade_no, //商户内部订单号
+      body,
+      total_fee: +total_fee,//total_fee * 100, //订单金额(单位：分)
+      spbill_create_ip: util.get_ip(ctx), //ip地址
+      openid
+    })
+    ctx.body={
+      code:200,
+      data:result
+    } 
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function access_token(ctx) {
@@ -90,26 +101,19 @@ async function getWXUserInfo(ctx) {
   } = ctx.request.body
   let tokenUrl = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appID}&secret=${appSecret}&code=${code}&grant_type=authorization_code`;
   try {
-     const  { body,response } = await request(tokenUrl);
-     if (response && response.statusCode && response.statusCode === 200) {
-        const result  = JSON.parse(body)
-        const { openid, access_token }  = result
-        const infoUrl = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
-        const  { body,response } =  await request(infoUrl);
-        if (response && response.statusCode && response.statusCode === 200) {
-          const wx_user_info = JSON.parse(body)
-          wx_user_info['openid'] = openid
-          wx_user_info['access_token']=access_token
-          console.log(wx_user_info)
-          ctx.body = {
-            code:200,
-            data : wx_user_info
-          }
-        }else{
-          console.log('============================='+response.statusCode);
-        }
-      }else{
-        console.log('============================='+response.statusCode);
+      const data = await request(tokenUrl);
+      const result  = JSON.parse(data)
+      console.log(result);
+      const { openid, access_token }  = result
+      const infoUrl = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+      const  body =  await request(infoUrl);
+      const wx_user_info = JSON.parse(body)
+      wx_user_info['openid'] = openid
+      wx_user_info['access_token']=access_token
+      console.log(wx_user_info)
+      ctx.body = {
+        code:200,
+        data : wx_user_info
       }
   } catch (error) {
     console.log(error)
