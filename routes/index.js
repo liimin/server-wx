@@ -24,7 +24,7 @@ router.get('/blessions/list', TempleController.getBlessionsList);
 // 获取寺庙设备
 router.get('/device/list', TempleController.getTempleDevice);
 // 新增微信用户信息
-router.get('/wx/adduser', TempleController.addWXUser);
+router.post('/wx/adduser', TempleController.addWXUser);
 
 // 点灯
 router.post('/temple/lighton', TempleController.lightOn);

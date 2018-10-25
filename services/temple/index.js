@@ -120,30 +120,52 @@ class TempleSevice {
      * @param {*} WX用户信息 
      */
     static async addWXUser(formData) {
-       const {
-           name,
-           wechar,
-           phone,
-           monk_id,
-           openid,
-           temple_id,
-           addr,
-           default_temple_url,
-       } = formData
-       const user={
-            name,
-            wechar,
-            phone,
-            monk_id,
-            openid,
-            temple_id,
-            addr,
-            default_temple_url,
-            createtime:new Date(),
-            updatetime:new Date()
-       }
-      const result = await UserService.create(user)
-        console.log(result)
+        try {
+            const {
+                name = '',
+                    nickname,
+                    phone,
+                    monk_id = 0,
+                    openid,
+                    temple_id,
+                    addr = '',
+                    default_temple_url,
+                    sex,
+                    language,
+                    city,
+                    province,
+                    country,
+                    headimgurl,
+                    access_token
+            } = formData
+            const user = {
+                name,
+                nickname,
+                phone,
+                monk_id,
+                openid,
+                temple_id,
+                addr,
+                default_temple_url,
+                sex,
+                language,
+                city,
+                province,
+                country,
+                headimgurl,
+                access_token,
+                createtime: new Date(),
+                updatetime: new Date()
+            }
+            const result = await UserService.create(user)
+            return {
+                code: 200,
+                data: '添加成功'
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     /**
