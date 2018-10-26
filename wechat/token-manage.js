@@ -6,10 +6,7 @@ const wxpay_config = require('./config/config');
 
 function TokenManager(options = wxpay_config) {
   EventEmitter.call(this);
-  const {
-    appID,
-    appSecret
-  } = options;
+  const { appID, appSecret } = options;
   if (!appID || !appSecret) {
     var error = new Error('Missing Appid or Secret');
     error.name = 'WeChatTokenError';

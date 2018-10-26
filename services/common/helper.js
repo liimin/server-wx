@@ -1,6 +1,10 @@
-const Helper={
-    PageEx:function(params){
-        let { page = 1, pageSize = 10 } =params
+var  Helper = {
+    ServerBase: 'http://59.110.235.8:9667',
+    content:'',
+    PageEx: function (params) {
+        let {
+            page = 1, pageSize = 10
+        } = params
         return {
             page,
             pageSize: +pageSize,
@@ -8,9 +12,15 @@ const Helper={
             limit: +pageSize
         }
     },
-    GetReturnObj:function(pager,ret){
-        const { rows ,count } = ret
-        const { page ,pageSize } = pager
+    GetReturnObj: function (pager, ret) {
+        const {
+            rows,
+            count
+        } = ret
+        const {
+            page,
+            pageSize
+        } = pager
         return {
             code: 200,
             data: rows,
@@ -22,6 +32,5 @@ const Helper={
             }
         }
     },
-    ServerBase:'http://59.110.235.8:9667'
 }
-module.exports=Helper
+module.exports = Helper

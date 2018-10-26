@@ -3,18 +3,8 @@ const BlessionsService = __base('blessions');
 const UserService = __base('user');
 const helper = require('../common/helper');
 const request = require('request')
-const path = require('path'); //系统路径模块
 const util = require('../../util/util')
-const TokenManager =require('../../wechat/token-manage')
-
-const tokenManager =new TokenManager()
-tokenManager.on('start', function() { 
-    console.log('=======================TokenManager Start==================='); 
-});
-tokenManager.on('token', token=> { 
-    TempleSevice.saveAccessToken(token)
-});
-tokenManager.start()
+const loader= require('../common/loader');
 class TempleSevice {
     /**
      *  access_token  持久化
@@ -52,20 +42,14 @@ class TempleSevice {
      * @returns {Promise<*>}
      */
     static async getTempleDetail(params) {
-        try {
-            let {
-                id
-            } = params
-            var file = path.join(__dirname, `../../public/${id}/content.json`); //文件路径，__dirname为当前运行js文件的目录
-            const res = await util.readFileAsync(file)
-            return {
-                code: 200,
-                data: JSON.parse(res.toString())
-            }
-        } catch (error) {
-            console.log(error)
+        let {
+            id
+        } = params
+        const data = await loader.fetch_content()
+        return {
+            code: 200,
+            data
         }
-        // return helper.GetReturnObj(Pager,ret)
     }
 
     static async lightOn(formData) {
@@ -208,7 +192,6 @@ class TempleSevice {
                     })
                 }, function (error, response, body) {
                     if (!error && response.statusCode == 200) {
-                        console.log(body) // 请求成功的处理逻辑 
                         resolve(JSON.parse(body))
                     } else {
                         console.log(error)
