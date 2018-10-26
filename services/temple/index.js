@@ -5,7 +5,24 @@ const helper = require('../common/helper');
 const request = require('request')
 const path = require('path'); //系统路径模块
 const util = require('../../util/util')
+const TokenManager =require('../../wechat/token-manage')
+
+const tokenManager =new TokenManager()
+tokenManager.on('start', function() { 
+    console.log('=======================TokenManager Start==================='); 
+});
+tokenManager.on('token', token=> { 
+    TempleSevice.saveAccessToken(token)
+});
+tokenManager.start()
 class TempleSevice {
+    /**
+     *  access_token  持久化
+     * @param {*} token 
+     */
+    static saveAccessToken(token){
+        console.log('t=======================================',token);
+    }
     /**
      * 获取祝福语列表
      * @returns {Promise<*>}

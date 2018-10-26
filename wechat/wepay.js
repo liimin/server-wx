@@ -1,14 +1,15 @@
 const tenpay = require('tenpay')
 var sha1 = require('sha1')
 // const fs = require('fs')
-const path = require('path')
+// const path = require('path')
 const wxpay_config = require('./config/config');
 const util = require('../util/util')
-const Wechat = require('./wechat')
-const wechat_file = path.join(__dirname, './config/wechat.txt')
+// const Wechat = require('./wechat')
+// const TokenManager = require('./token-manage')
+// const wechat_file = path.join(__dirname, './config/wechat.txt')
 const request = require('request-promise')
 // const Payment = require('wechat-pay').Payment;
-
+ 
 const {
   appID,
   mchId,
@@ -30,7 +31,7 @@ const config = {
     return util.writeFileAsync(wechat_file, data)
   }
 }
-const wechat = new Wechat(config)
+// const wechat = new Wechat(config)
 
 const wechatConfig = {
   appid: appID,

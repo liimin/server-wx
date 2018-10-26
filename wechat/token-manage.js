@@ -2,25 +2,28 @@ var request = require('request');
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var querystring = require('querystring');
+const wxpay_config = require('./config/config');
 
-function TokenManager(appid, secret, retryDelay) {
+function TokenManager(options = wxpay_config) {
   EventEmitter.call(this);
-
-  if (!appid || !secret) {
+  const {
+    appID,
+    appSecret
+  } = options;
+  if (!appID || !appSecret) {
     var error = new Error('Missing Appid or Secret');
     error.name = 'WeChatTokenError';
     throw error;
   }
-
-  this.appid = appid;
-  this.secret = secret;
+  this.appid = appID;
+  this.secret = appSecret;
 
   this.delay = 1;
-  this.retryDelay = retryDelay || 20 * 1000;
+  this.retryDelay = options.retryDelay || 20 * 1000;
 
   this.querystring = querystring.stringify({
-    appid: appid,
-    secret: secret,
+    appid: appID,
+    secret: appSecret,
     grant_type: 'client_credential',
   });
 
@@ -55,7 +58,7 @@ TokenManager.prototype.setAccessToken = function setAccessToken(data) {
   // 将实际过期时间提前120秒
   this.delay = (data.expires_in - 120) * 1000;
   this.accessToken = data.access_token;
-  this.emit('token', this.accessToken);
+  this.emit('token', {'appid':this.appid,'secret':this.secret,token:this.accessToken});
 };
 
 TokenManager.prototype.autoFetchAccessToken = function autoFetchAccessToken() {
