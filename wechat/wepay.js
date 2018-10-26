@@ -56,7 +56,7 @@ async function getPayParams(ctx) {
     let result = await wechatApi.getPayParams({
       out_trade_no, //商户内部订单号
       body,
-      total_fee: +total_fee,//total_fee * 100, //订单金额(单位：分)
+      total_fee: total_fee * 100, //订单金额(单位：分)
       spbill_create_ip: util.get_ip(ctx), //ip地址
       openid
     })
