@@ -104,14 +104,13 @@ async function getWXUserInfo(ctx) {
   try {
       const data = await request(tokenUrl);
       const result  = JSON.parse(data)
-      console.log(result);
       const { openid, access_token }  = result
       const infoUrl = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
       const  body =  await request(infoUrl);
       const wx_user_info = JSON.parse(body)
       wx_user_info['openid'] = openid
       wx_user_info['access_token']=access_token
-      console.log(wx_user_info)
+      console.log('==============================获取微信用户信息================================',wx_user_info)
       ctx.body = {
         code:200,
         data : wx_user_info

@@ -3,16 +3,16 @@ const TempleController = require('../controllers/temple')
 const TemplesController = require('../controllers/temples')
 const AdminController = require('../controllers/admin')
 const {
-    getPayParams,
-    access_token,
-    // getBrandWCPayRequestParams,
-    // getWXOpenId,
-    getWXUserInfo
+  getPayParams,
+  access_token,
+  // getBrandWCPayRequestParams,
+  // getWXOpenId,
+  getWXUserInfo
 } = require('../wechat/wepay')
 
 
 const router = new Router({
-    // prefix: '/api/v1'
+  // prefix: '/api/v1'
 })
 
 // 获取寺观列表
