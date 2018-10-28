@@ -2,7 +2,7 @@
     "id": 1,
     "name": "绵阳市飞来寺",
     "summary": "每个人都有属于自己的一片森林，也许我们从来不曾去过，但它一直在那里，总会在那里。迷失的人迷失了，相逢的人会再相逢。",
-    "server":"http://localhost:80/1/images/",
+    "server":"http://47.92.203.176/1/images/",
     "swiper_items": [{
             "color": "#fff",
             "src": "guanyin.png"
