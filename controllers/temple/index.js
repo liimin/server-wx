@@ -63,5 +63,18 @@ class templeController {
       response.ERROR(response.CODE.ERROR_412, e, ctx);
     }
   }
+   /**
+   * 获取供灯记录
+   * @param ctx
+   * @returns {Promise.<void>}
+   */
+  static async getRecords(ctx) {
+    try {
+      const data = await templeService.getRecords(ctx.query)
+      response.SUCCESS(data, ctx)
+    } catch (e) {
+      response.ERROR(response.CODE.ERROR_412, e, ctx);
+    }
+  }
 }
 module.exports = templeController

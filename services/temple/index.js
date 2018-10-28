@@ -197,6 +197,27 @@ class TempleSevice {
       console.log(error)
     }
   }
+
+   /**
+   * 获取供灯记录
+   * @returns {Promise<*>}
+   */
+  static async getRecords(params) {
+    let {
+      openid
+    } = params
+    const form = JSON.stringify({ openid})
+    const url = `${helper.ServerBase}/get_record`
+    const body = await request.post({
+      url,
+      form
+    })
+    const res = JSON.parse(body)
+    return {
+      code: res.errcode == '0' ? 200 : res.errcode,
+      data: res.errcode == '0' ? res.records:[]
+    }
+  }
 }
 
 module.exports = TempleSevice

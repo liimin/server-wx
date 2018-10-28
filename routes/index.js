@@ -25,7 +25,8 @@ router.get('/blessions/list', TempleController.getBlessionsList);
 router.get('/device/list', TempleController.getTempleDevice);
 // 新增微信用户信息
 router.post('/wx/adduser', TempleController.addWXUser);
-
+//获取供灯记录
+router.get('/wx/records', TempleController.getRecords)
 // 点灯
 router.post('/temple/lighton', TempleController.lightOn);
 // 关灯
