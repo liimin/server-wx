@@ -11,7 +11,7 @@ const sequelize = new Sequelize('lighting', 'root', 'Tom!@#$4321Jiang', {
         bigNumberStrings: true
     },
     pool: {
-        max: 5,
+        max: 20,
         min: 0,
         acquire: 30000,
         idle: 10000
