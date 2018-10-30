@@ -206,17 +206,26 @@ class TempleSevice {
     let {
       openid
     } = params
-    const form = JSON.stringify({ openid})
-    const url = `${helper.ServerBase}/get_record`
-    const body = await request.post({
-      url,
-      form
+    const sign = util.getSign({
+      openid
     })
-    const res = JSON.parse(body)
-    return {
-      code: res.errcode == '0' ? 200 : res.errcode,
-      data: res.errcode == '0' ? res.records:[]
+    try {
+      const form = JSON.stringify({ openid, sign})
+      const url = `${helper.ServerBase}/get_record`
+      const body = await request.post({
+        url,
+        form
+      })
+      console.log(body);
+      const res = JSON.parse(body)
+      return {
+        code: res.errcode == '0' ? 200 : res.errcode,
+        data: res.errcode == '0' ? res.records:[]
+      }
+    } catch (error) {
+      console.log(error);
     }
+    
   }
 }
 
